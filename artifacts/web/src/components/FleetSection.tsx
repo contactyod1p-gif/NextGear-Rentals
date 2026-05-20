@@ -7,6 +7,8 @@ import cretaImg from "@assets/Screenshot_2026-05-20-07-31-45-608_com.instagram.a
 import fortunerImg from "@assets/Screenshot_2026-05-20-07-29-07-167_com.instagram.android-edit_1779244183462.jpg";
 import glcImg from "@assets/Screenshot_2026-05-20-07-32-05-692_com.instagram.android-edit_1779244183346.jpg";
 import carensImg from "@assets/Screenshot_2026-05-20-07-31-10-380_com.instagram.android-edit_1779244183422.jpg";
+import himalayanImg from "@assets/Screenshot_2026-05-20-07-32-16-514_com.instagram.android-edit_1779244183286.jpg";
+import meteorImg from "@assets/Screenshot_2026-05-20-07-32-24-202_com.instagram.android-edit_1779244167632.jpg";
 
 interface Vehicle {
   name: string;
@@ -92,6 +94,30 @@ const FLEET: Vehicle[] = [
     accentColor: "teal",
     image: carensImg,
   },
+  {
+    name: "RE Himalayan",
+    category: "Adventure Bike",
+    pricePerDay: 2500,
+    seats: 1,
+    fuel: "Petrol",
+    transmission: "Manual",
+    features: ["Adventure Touring", "Long Travel Suspension", "USB Charging", "Tripper Nav"],
+    badge: "Adventure",
+    accentColor: "orange",
+    image: himalayanImg,
+  },
+  {
+    name: "RE Meteor 350",
+    category: "Cruiser Bike",
+    pricePerDay: 2200,
+    seats: 1,
+    fuel: "Petrol",
+    transmission: "Manual",
+    features: ["Cruiser Style", "Tripper Navigation", "Bluetooth Console", "Dual Channel ABS"],
+    badge: "Cruiser",
+    accentColor: "rose",
+    image: meteorImg,
+  },
 ];
 
 const ACCENT_BORDER: Record<string, string> = {
@@ -101,6 +127,8 @@ const ACCENT_BORDER: Record<string, string> = {
   zinc:   "hover:border-zinc-400/40",
   yellow: "hover:border-yellow-400/40",
   teal:   "hover:border-teal-400/40",
+  orange: "hover:border-orange-400/40",
+  rose:   "hover:border-rose-400/40",
 };
 
 const ACCENT_GLOW: Record<string, string> = {
@@ -110,6 +138,8 @@ const ACCENT_GLOW: Record<string, string> = {
   zinc:   "rgba(161,161,170,0.10)",
   yellow: "rgba(250,204,21,0.14)",
   teal:   "rgba(45,212,191,0.14)",
+  orange: "rgba(251,146,60,0.14)",
+  rose:   "rgba(251,113,133,0.14)",
 };
 
 const ACCENT_TEXT: Record<string, string> = {
@@ -119,6 +149,8 @@ const ACCENT_TEXT: Record<string, string> = {
   zinc:   "text-zinc-300",
   yellow: "text-yellow-400",
   teal:   "text-teal-400",
+  orange: "text-orange-400",
+  rose:   "text-rose-400",
 };
 
 const BADGE_STYLE: Record<string, string> = {
@@ -128,6 +160,8 @@ const BADGE_STYLE: Record<string, string> = {
   zinc:   "text-zinc-300 border-zinc-400/40 bg-zinc-400/10",
   yellow: "text-yellow-400 border-yellow-400/40 bg-yellow-400/10",
   teal:   "text-teal-400 border-teal-400/40 bg-teal-400/10",
+  orange: "text-orange-400 border-orange-400/40 bg-orange-400/10",
+  rose:   "text-rose-400 border-rose-400/40 bg-rose-400/10",
 };
 
 const cardVariants = {
