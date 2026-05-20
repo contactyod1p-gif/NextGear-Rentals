@@ -159,6 +159,16 @@ const CustomTooltipBar = ({ active, payload }: { active?: boolean; payload?: { v
 };
 
 export default function AdminDashboard() {
+  const { isAuthenticated, login, logout } = useAdminAuth();
+
+  if (!isAuthenticated) {
+    return <AdminLoginGate onLogin={login} />;
+  }
+
+  return <AdminDashboardInner onLogout={logout} />;
+}
+
+function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
   const qc = useQueryClient();
 
   const { data: bookings = [], isLoading: loadingBookings } = useListBookings();
@@ -294,6 +304,16 @@ export default function AdminDashboard() {
                 className="ml-2 text-xs font-semibold text-zinc-500 hover:text-white border border-white/8 hover:border-white/20 rounded-full px-3 py-1.5 transition-all"
               >
                 Refresh
+              </button>
+              <button
+                onClick={onLogout}
+                className="text-xs font-semibold text-zinc-500 hover:text-red-400 border border-white/8 hover:border-red-500/30 rounded-full px-3 py-1.5 transition-all flex items-center gap-1.5"
+                title="Sign out of admin"
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sign out
               </button>
             </div>
           </div>
