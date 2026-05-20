@@ -19,6 +19,8 @@ import {
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getListBookingsQueryKey, getGetBookingStatsQueryKey } from "@workspace/api-client-react";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+import AdminLoginGate from "@/components/AdminLoginGate";
 
 type SortKey = "bookingDate" | "fullName" | "selectedVehicle" | "rentalDays";
 type SortDir = "asc" | "desc";
