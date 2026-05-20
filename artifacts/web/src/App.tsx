@@ -7,6 +7,7 @@ import HeroSection from "@/components/HeroSection";
 import FleetSection from "@/components/FleetSection";
 import BookingForm from "@/components/BookingForm";
 import Footer from "@/components/Footer";
+import AdminDashboard from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -31,6 +32,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
