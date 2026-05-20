@@ -13,6 +13,10 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
+// Trust the first hop from the Replit / reverse-proxy layer so that
+// express-rate-limit can read the real client IP from X-Forwarded-For.
+app.set("trust proxy", 1);
+
 // ─── Security Headers ────────────────────────────────────────────────────────
 // Helmet sets 11 security-related HTTP headers (X-Content-Type-Options,
 // Strict-Transport-Security, X-Frame-Options, etc.) to harden the API surface.
