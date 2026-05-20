@@ -262,6 +262,25 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
     }
   }
 
+  function exportToCSV() {
+    const headers = ["Name", "Phone", "Vehicle", "Rental Days", "Booked On"];
+    const rows = filtered.map((b: Booking) => [
+      `"${b.fullName.replace(/"/g, '""')}"`,
+      `"${b.phoneNumber.replace(/"/g, '""')}"`,
+      `"${b.selectedVehicle.replace(/"/g, '""')}"`,
+      b.rentalDays,
+      `"${new Date(b.bookingDate).toLocaleString("en-IN")}"`,
+    ]);
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nextgear-bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   function SortIcon({ col }: { col: SortKey }) {
     if (sortKey !== col) return <span className="text-zinc-700 ml-1">↕</span>;
     return <span className="text-yellow-400 ml-1">{sortDir === "asc" ? "↑" : "↓"}</span>;
@@ -461,17 +480,30 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
                   {filtered.length} of {bookings.length} record{bookings.length !== 1 ? "s" : ""}
                 </p>
               </div>
-              <div className="relative w-full sm:w-64">
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="search"
-                  placeholder="Search name, phone, vehicle…"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 pl-8 pr-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-yellow-400/40 focus:ring-1 focus:ring-yellow-400/15 transition-all"
-                />
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="relative flex-1 sm:w-64">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="search"
+                    placeholder="Search name, phone, vehicle…"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 pl-8 pr-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-yellow-400/40 focus:ring-1 focus:ring-yellow-400/15 transition-all"
+                  />
+                </div>
+                <button
+                  onClick={exportToCSV}
+                  disabled={filtered.length === 0}
+                  title="Export visible rows to CSV"
+                  className="flex items-center gap-1.5 rounded-xl border border-yellow-400/30 bg-yellow-400/10 hover:bg-yellow-400/20 disabled:opacity-40 disabled:cursor-not-allowed px-3.5 py-2.5 text-xs font-semibold text-yellow-400 transition-all whitespace-nowrap"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Export CSV
+                </button>
               </div>
             </div>
 
