@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const SPRING = { stiffness: 200, damping: 20 };
@@ -225,6 +225,11 @@ export default function HeroSection() {
   const [city, setCity] = useState("");
   const [pickupTime, setPickupTime] = useState(getTodayLocal);
   const [dropoffTime, setDropoffTime] = useState(getTomorrowLocal);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const handleVideoLoaded = useCallback(() => {
+    setVideoLoaded(true);
+  }, []);
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = cardRef.current?.getBoundingClientRect();
@@ -248,15 +253,33 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#08090a] transform-gpu"
       style={{ willChange: "transform" }}
     >
+      {/* ── Poster skeleton — visible until video first frame is decoded ── */}
+      <div
+        className={`absolute inset-0 z-0 pointer-events-none transition-opacity duration-700 ease-in-out ${videoLoaded ? "opacity-0" : "opacity-100"}`}
+        aria-hidden
+      >
+        <img
+          src="/images/hero-poster.png"
+          alt=""
+          className="w-full h-full object-cover"
+          fetchPriority="high"
+          draggable={false}
+        />
+        {/* Darken poster to match video-era contrast so the switch is invisible */}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
+
       {/* ── Cinematic video background ── */}
       <video
-        className="absolute inset-0 w-full h-full object-cover z-0 transform-gpu"
+        className={`absolute inset-0 w-full h-full object-cover z-0 transform-gpu transition-opacity duration-700 ease-in-out ${videoLoaded ? "opacity-100" : "opacity-0"}`}
         style={{ willChange: "transform" }}
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
+        poster="/images/hero-poster.png"
+        onLoadedData={handleVideoLoaded}
         aria-hidden
       >
         <source src="/videos/hero-car-video.mp4" type="video/mp4" />
