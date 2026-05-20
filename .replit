@@ -11,6 +11,43 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend API"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=22333 BASE_PATH=/ pnpm --filter @workspace/web run dev"
+waitForPort = 22333
+
+[[workflows.workflow]]
+name = "Backend API"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/api-server run dev"
+waitForPort = 8080
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true
@@ -30,3 +67,16 @@ externalPort = 80
 [[ports]]
 localPort = 22333
 externalPort = 3000
+
+[userenv]
+
+[userenv.development]
+LOG_LEVEL = "info"
+NODE_ENV = "development"
+
+[userenv.production]
+LOG_LEVEL = "warn"
+NODE_ENV = "production"
+
+[userenv.shared]
+PORT = "8080"

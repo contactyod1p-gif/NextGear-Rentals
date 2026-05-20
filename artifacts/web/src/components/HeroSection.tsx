@@ -72,6 +72,7 @@ export default function HeroSection() {
             rotateX,
             rotateY,
             transformStyle: "preserve-3d",
+            willChange: "transform",
           }}
           className="transform-gpu cursor-default"
         >

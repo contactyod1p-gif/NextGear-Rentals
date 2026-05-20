@@ -110,12 +110,16 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       className="transform-gpu"
+      style={{ willChange: "transform" }}
     >
       <motion.div
         animate={{ y: hovered ? -6 : 0, scale: hovered ? 1.02 : 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className={`relative rounded-2xl border border-white/8 bg-gradient-to-br ${vehicle.gradient} backdrop-blur-sm overflow-hidden cursor-pointer h-full`}
-        style={{ background: `linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)` }}
+        className={`relative rounded-2xl border border-white/8 bg-gradient-to-br ${vehicle.gradient} backdrop-blur-sm overflow-hidden cursor-pointer h-full transform-gpu`}
+        style={{
+          willChange: "transform",
+          background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+        }}
       >
         <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${vehicle.gradient}`} />
 

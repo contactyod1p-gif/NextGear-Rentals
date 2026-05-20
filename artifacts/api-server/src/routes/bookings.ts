@@ -1,17 +1,37 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import { db, bookingsTable } from "@workspace/db";
-import { eq, count, avg, sql } from "drizzle-orm";
+import { eq, count, avg } from "drizzle-orm";
 import {
   CreateBookingBody,
   GetBookingParams,
   DeleteBookingParams,
 } from "@workspace/api-zod";
 
+// ─── Rate Limiters ────────────────────────────────────────────────────────────
+// The global limiter in app.ts enforces 100 req/15 min across all /api routes.
+// Destructive/write operations on bookings get an additional tighter cap.
+const bookingWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 20,                 // max 20 write requests per window per IP (admin ops)
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    error:
+      "Too many booking modification requests from this IP — please wait 15 minutes.",
+  },
+  skip: () => process.env.NODE_ENV === "test",
+});
+
 const router = Router();
 
+// GET /api/bookings — list all bookings (read-only, covered by global limiter)
 router.get("/bookings", async (req, res) => {
   try {
-    const bookings = await db.select().from(bookingsTable).orderBy(bookingsTable.bookingDate);
+    const bookings = await db
+      .select()
+      .from(bookingsTable)
+      .orderBy(bookingsTable.bookingDate);
     res.json(bookings.map(normalizeBooking));
   } catch (err) {
     req.log.error({ err }, "Failed to list bookings");
@@ -19,14 +39,22 @@ router.get("/bookings", async (req, res) => {
   }
 });
 
-router.post("/bookings", async (req, res) => {
+// POST /api/bookings — create booking (internal/admin, tighter write limit)
+router.post("/bookings", bookingWriteLimiter, async (req, res) => {
   const parsed = CreateBookingBody.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
+    res.status(400).json({
+      error: "Invalid request body",
+      details: parsed.error.issues.map((i: { path: (string | number)[]; message: string }) => ({
+        field: i.path[0] ?? null,
+        message: i.message,
+      })),
+    });
     return;
   }
 
-  const { fullName, phoneNumber, selectedVehicle, rentalDays, bookingDate } = parsed.data;
+  const { fullName, phoneNumber, selectedVehicle, rentalDays, bookingDate } =
+    parsed.data;
 
   try {
     const [booking] = await db
@@ -47,9 +75,12 @@ router.post("/bookings", async (req, res) => {
   }
 });
 
+// GET /api/bookings/stats/summary — aggregated stats (read-only)
 router.get("/bookings/stats/summary", async (req, res) => {
   try {
-    const [totalRow] = await db.select({ total: count() }).from(bookingsTable);
+    const [totalRow] = await db
+      .select({ total: count() })
+      .from(bookingsTable);
     const [avgRow] = await db
       .select({ avg: avg(bookingsTable.rentalDays) })
       .from(bookingsTable);
@@ -65,7 +96,7 @@ router.get("/bookings/stats/summary", async (req, res) => {
     res.json({
       totalBookings: totalRow?.total ?? 0,
       averageRentalDays: parseFloat(avgRow?.avg ?? "0"),
-      vehicleBreakdown: vehicleRows.map((r) => ({
+      vehicleBreakdown: vehicleRows.map((r: { vehicle: string; count: number }) => ({
         vehicle: r.vehicle,
         count: r.count,
       })),
@@ -76,10 +107,11 @@ router.get("/bookings/stats/summary", async (req, res) => {
   }
 });
 
+// GET /api/bookings/:id — single booking lookup, validates ID param
 router.get("/bookings/:id", async (req, res) => {
   const parsed = GetBookingParams.safeParse({ id: Number(req.params.id) });
   if (!parsed.success) {
-    res.status(400).json({ error: "Invalid booking ID" });
+    res.status(400).json({ error: "Invalid booking ID — must be a positive integer" });
     return;
   }
 
@@ -101,10 +133,11 @@ router.get("/bookings/:id", async (req, res) => {
   }
 });
 
-router.delete("/bookings/:id", async (req, res) => {
+// DELETE /api/bookings/:id — hard delete, write limiter applied
+router.delete("/bookings/:id", bookingWriteLimiter, async (req, res) => {
   const parsed = DeleteBookingParams.safeParse({ id: Number(req.params.id) });
   if (!parsed.success) {
-    res.status(400).json({ error: "Invalid booking ID" });
+    res.status(400).json({ error: "Invalid booking ID — must be a positive integer" });
     return;
   }
 
@@ -126,6 +159,9 @@ router.delete("/bookings/:id", async (req, res) => {
   }
 });
 
+// ─── Normalizer ───────────────────────────────────────────────────────────────
+// Serializes a raw DB row into a safe, consistent API response shape.
+// Ensures bookingDate is always an ISO 8601 string regardless of DB driver output.
 function normalizeBooking(booking: typeof bookingsTable.$inferSelect) {
   return {
     id: booking.id,
@@ -133,9 +169,10 @@ function normalizeBooking(booking: typeof bookingsTable.$inferSelect) {
     phoneNumber: booking.phoneNumber,
     selectedVehicle: booking.selectedVehicle,
     rentalDays: booking.rentalDays,
-    bookingDate: booking.bookingDate instanceof Date
-      ? booking.bookingDate.toISOString()
-      : booking.bookingDate,
+    bookingDate:
+      booking.bookingDate instanceof Date
+        ? booking.bookingDate.toISOString()
+        : booking.bookingDate,
   };
 }
 

@@ -28,6 +28,14 @@ async function buildAll() {
     // - uses native modules and loads them dynamically (e.g. sharp)
     // - use path traversal to read files (e.g. @google-cloud/secret-manager loads sibling .proto files)
     external: [
+      // Workspace lib dependencies that must be resolved at runtime from root node_modules
+      "drizzle-orm",
+      "drizzle-orm/*",
+      "drizzle-zod",
+      "pg",
+      "zod",
+      "zod/v4",
+      "helmet",
       "*.node",
       "sharp",
       "better-sqlite3",
