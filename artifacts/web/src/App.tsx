@@ -9,6 +9,7 @@ import BookingForm from "@/components/BookingForm";
 import Footer from "@/components/Footer";
 import AdminDashboard from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +45,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
+          <WhatsAppButton />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
