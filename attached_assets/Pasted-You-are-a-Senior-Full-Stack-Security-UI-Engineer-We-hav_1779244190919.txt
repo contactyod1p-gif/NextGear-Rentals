@@ -1,0 +1,22 @@
+You are a Senior Full-Stack Security & UI Engineer. We have just imported our existing vehicle rental repository "NextGear-Rentals" from GitHub. Along with this prompt, I am uploading the real vehicle images provided by the client. Before we write code, we need to secure the repo and visually transform the fleet grid.
+
+Please scan the entire codebase and execute these two phases immediately:
+
+### PHASE 1: ENFORCE ENTERPRISE SECURITY & INFRASTRUCTURE
+1. Zero Exposed Secrets: Move any database credentials or sensitive strings into a root `.env` file (and ensure `.env` is added to `.gitignore`). In the Vite/React frontend, strictly reference configurations via `import.meta.env.VITE_...`.
+2. Rate Limiting: Inject `express-rate-limit` middleware across the backend API routes (specifically a maximum of 5 requests per 15 mins on the rental booking endpoint) to block spam bots.
+3. Input Validation: Enforce strict schema validation using Zod on BOTH frontend forms and backend route controllers parsing `req.body` to prevent bad data.
+
+### PHASE 2: REAL IMAGERY INJECTION & PREMIUM FRONTEND
+Please save the uploaded images into the frontend public directory (`/frontend/public/images/fleet/`) and completely replace any generic icons or placeholders in the vehicle grid/fleet displaying array with these real assets:
+
+- For the Mahindra Thar Card: Use the uploaded white Thar image. (Save as `thar.png`)
+- For the Toyota Innova Card: Use the uploaded metallic MPV/Innova image. (Save as `innova.png`)
+- For the RE Himalayan Card: Use the uploaded adventure motorcycle image. (Save as `himalayan.png`)
+- For the RE Meteor 350 Card: Use the uploaded cruiser motorcycle image. (Save as `meteor.png`)
+
+Ensure the UI cards render these images with fluid layout properties (`aspect-[16/10]` and `object-cover`) so they display beautifully without distortion or lag on mobile viewports. Use `transform-gpu` for hardware acceleration.
+
+Theme Styling: Maintain the deep obsidian background (`bg-[#0B0B0F]`) with glowing amber/yellow control accents, and apply a premium glassmorphism hover effect (`bg-white/5 backdrop-blur-md border border-white/10`) to all 4 fleet cards.
+
+Preserve the existing database and dashboard logic, audit the files, inject the security layers, and update the UI with these uploaded real images immediately.
