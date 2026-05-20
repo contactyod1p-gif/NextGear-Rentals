@@ -1,6 +1,20 @@
 import { useRef, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
+function shouldSkipVideo(): boolean {
+  try {
+    const conn = (navigator as Navigator & { connection?: {
+      saveData?: boolean;
+      effectiveType?: string;
+    } }).connection;
+    if (!conn) return false;
+    if (conn.saveData) return true;
+    return conn.effectiveType === "slow-2g" || conn.effectiveType === "2g";
+  } catch {
+    return false;
+  }
+}
+
 const SPRING = { stiffness: 200, damping: 20 };
 
 const CITIES = [
@@ -225,7 +239,9 @@ export default function HeroSection() {
   const [city, setCity] = useState("");
   const [pickupTime, setPickupTime] = useState(getTodayLocal);
   const [dropoffTime, setDropoffTime] = useState(getTomorrowLocal);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const skipVideo = shouldSkipVideo();
+  const [videoLoaded, setVideoLoaded] = useState(() => skipVideo);
 
   const handleVideoLoaded = useCallback(() => {
     setVideoLoaded(true);
@@ -269,21 +285,23 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* ── Cinematic video background ── */}
-      <video
-        className={`absolute inset-0 w-full h-full object-cover z-0 transform-gpu transition-opacity duration-700 ease-in-out ${videoLoaded ? "opacity-100" : "opacity-0"}`}
-        style={{ willChange: "transform" }}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        poster="/images/hero-poster.png"
-        onLoadedData={handleVideoLoaded}
-        aria-hidden
-      >
-        <source src="/videos/hero-car-video.mp4" type="video/mp4" />
-      </video>
+      {/* ── Cinematic video background — omitted entirely on metered/slow connections ── */}
+      {!skipVideo && (
+        <video
+          className={`absolute inset-0 w-full h-full object-cover z-0 transform-gpu transition-opacity duration-700 ease-in-out ${videoLoaded ? "opacity-100" : "opacity-0"}`}
+          style={{ willChange: "transform" }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/images/hero-poster.png"
+          onLoadedData={handleVideoLoaded}
+          aria-hidden
+        >
+          <source src="/videos/hero-car-video.mp4" type="video/mp4" />
+        </video>
+      )}
 
       {/* Dark overlay — ensures AAA contrast for all text and the booking widget */}
       <div
