@@ -24,7 +24,10 @@ import type {
   BookingInput,
   BookingStats,
   ErrorResponse,
-  HealthStatus
+  HealthStatus,
+  RentalBookError,
+  RentalBookInput,
+  RentalBookResponse
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -412,6 +415,79 @@ export const useDeleteBooking = <TError = ErrorType<ErrorResponse>,
         TContext
       > => {
       return useMutation(getDeleteBookingMutationOptions(options));
+    }
+
+export const getCreateRentalBookUrl = () => {
+
+
+
+
+  return `/api/rentals/book`
+}
+
+/**
+ * Public-facing booking endpoint. Rate-limited to 5 requests per IP per 15 minutes. Validates all fields strictly and persists to the bookings table.
+
+ * @summary Submit a rental booking (rate-limited)
+ */
+export const createRentalBook = async (rentalBookInput: RentalBookInput, options?: RequestInit): Promise<RentalBookResponse> => {
+
+  return customFetch<RentalBookResponse>(getCreateRentalBookUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      rentalBookInput,)
+  }
+);}
+
+
+
+
+export const getCreateRentalBookMutationOptions = <TError = ErrorType<RentalBookError | ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRentalBook>>, TError,{data: BodyType<RentalBookInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRentalBook>>, TError,{data: BodyType<RentalBookInput>}, TContext> => {
+
+const mutationKey = ['createRentalBook'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRentalBook>>, {data: BodyType<RentalBookInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createRentalBook(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRentalBookMutationResult = NonNullable<Awaited<ReturnType<typeof createRentalBook>>>
+    export type CreateRentalBookMutationBody = BodyType<RentalBookInput>
+    export type CreateRentalBookMutationError = ErrorType<RentalBookError | ErrorResponse>
+
+    /**
+ * @summary Submit a rental booking (rate-limited)
+ */
+export const useCreateRentalBook = <TError = ErrorType<RentalBookError | ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRentalBook>>, TError,{data: BodyType<RentalBookInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createRentalBook>>,
+        TError,
+        {data: BodyType<RentalBookInput>},
+        TContext
+      > => {
+      return useMutation(getCreateRentalBookMutationOptions(options));
     }
 
 export const getGetBookingStatsUrl = () => {

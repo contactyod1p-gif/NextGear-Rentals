@@ -77,6 +77,31 @@ export const DeleteBookingParams = zod.object({
 
 
 /**
+ * Public-facing booking endpoint. Rate-limited to 5 requests per IP per 15 minutes. Validates all fields strictly and persists to the bookings table.
+
+ * @summary Submit a rental booking (rate-limited)
+ */
+export const createRentalBookBodyFullNameMin = 2;
+export const createRentalBookBodyFullNameMax = 80;
+
+export const createRentalBookBodyPhoneNumberMin = 7;
+export const createRentalBookBodyPhoneNumberMax = 20;
+
+
+export const createRentalBookBodyRentalDaysMax = 90;
+
+
+
+export const CreateRentalBookBody = zod.object({
+  "fullName": zod.string().min(createRentalBookBodyFullNameMin).max(createRentalBookBodyFullNameMax),
+  "phoneNumber": zod.string().min(createRentalBookBodyPhoneNumberMin).max(createRentalBookBodyPhoneNumberMax).describe('E.g. +91 98765 43210 — must be a valid phone number format'),
+  "selectedVehicle": zod.string().min(1),
+  "rentalDays": zod.number().min(1).max(createRentalBookBodyRentalDaysMax),
+  "bookingDate": zod.coerce.date()
+})
+
+
+/**
  * Returns aggregated booking stats (total, by vehicle, etc.)
  * @summary Booking statistics summary
  */

@@ -41,6 +41,47 @@ export interface BookingStats {
   averageRentalDays: number;
 }
 
+export interface RentalBookInput {
+  /**
+     * @minLength 2
+     * @maxLength 80
+     */
+  fullName: string;
+  /**
+     * E.g. +91 98765 43210 — must be a valid phone number format
+     * @minLength 7
+     * @maxLength 20
+     */
+  phoneNumber: string;
+  /** @minLength 1 */
+  selectedVehicle: string;
+  /**
+     * @minimum 1
+     * @maximum 90
+     */
+  rentalDays: number;
+  bookingDate: string;
+}
+
+export interface RentalBookResponse {
+  success: boolean;
+  bookingId: number;
+  reference: string;
+  message: string;
+  booking: Booking;
+}
+
+export type RentalBookErrorDetailsItem = {
+  field: unknown | null;
+  message: string;
+};
+
+export interface RentalBookError {
+  error: string;
+  field?: string | null;
+  details?: RentalBookErrorDetailsItem[];
+}
+
 export interface ErrorResponse {
   error: string;
 }

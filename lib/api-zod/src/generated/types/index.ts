@@ -11,4 +11,8 @@ export * from './bookingInput';
 export * from './bookingStats';
 export * from './errorResponse';
 export * from './healthStatus';
+export * from './rentalBookError';
+export * from './rentalBookErrorDetailsItem';
+export * from './rentalBookInput';
+export * from './rentalBookResponse';
 export * from './vehicleCount';
