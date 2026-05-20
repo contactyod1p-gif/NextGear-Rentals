@@ -14,6 +14,8 @@ const CITIES = [
   "Goa",
   "Manali",
   "Leh",
+  "Guwahati",
+  "Jorhat",
 ] as const;
 
 function getTodayLocal() {
