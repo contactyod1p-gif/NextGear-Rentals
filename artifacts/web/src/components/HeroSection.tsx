@@ -26,31 +26,26 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#08090a]">
+      {/* Hero background image */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden
+        style={{
+          backgroundImage: "url('/hero-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      {/* Dark overlay to keep text readable */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(234,179,8,0.12) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(234,179,8,0.06) 0%, transparent 60%)",
+            "linear-gradient(to bottom, rgba(8,9,10,0.65) 0%, rgba(8,9,10,0.5) 40%, rgba(8,9,10,0.75) 100%)",
         }}
       />
-
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-        {[...Array(28)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-yellow-400/5"
-            style={{
-              width: Math.random() * 3 + 1 + "px",
-              height: Math.random() * 3 + 1 + "px",
-              top: Math.random() * 100 + "%",
-              left: Math.random() * 100 + "%",
-              animation: `float ${4 + Math.random() * 6}s ease-in-out infinite`,
-              animationDelay: Math.random() * 4 + "s",
-            }}
-          />
-        ))}
-      </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-6 py-24 max-w-5xl mx-auto">
         <motion.div

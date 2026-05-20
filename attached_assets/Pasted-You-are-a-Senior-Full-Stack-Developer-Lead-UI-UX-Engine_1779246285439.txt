@@ -1,0 +1,24 @@
+You are a Senior Full-Stack Developer & Lead UI/UX Engineer. We have just imported our existing rental repository "NextGear-Rentals" from GitHub. Along with this prompt, I am uploading the real vehicle images (Thar, Innova, Himalayan, Meteor). We need to completely rewrite the frontend UI/UX to precisely mirror the layout style, clean cards structure, and professional look of modern Indian self-drive rental platforms like Wanderides, while strictly maintaining our backend security architecture.
+
+Please compile the codebase immediately following these execution rules:
+
+### PHASE 1: REFACTOR FRONTEND INTERFACE (Wanderides Clean Style)
+1. Color Palette & Typography: Shift from aggressive neon to a highly professional corporate rental theme. Use deep dark charcoal backgrounds for content hierarchy, pristine layouts, with bold, modern geometric typography.
+2. Hero & Search Widget Layer:
+   - Create a clean headline: "Premium Self-Drive Rentals with NextGear".
+   - Immediately below the headline, embed a responsive Horizontal Booking Form Container. It must feature interactive inputs for: "Select City", "Pick-up Date & Time", and "Drop-off Date & Time".
+3. Enterprise Fleet Grid Layout: Configure a gorgeous responsive multi-column grid displaying the fleet using the uploaded real files. Save and map the assets as follow:
+   - Mahindra Thar Card: Save uploaded white Thar as `thar.png`. Add specs badges: [4 Seats] [Manual] [Diesel]. Display Price: "₹4,500/day".
+   - Toyota Innova Card: Save uploaded metallic MPV as `innova.png`. Add specs badges: [7 Seats] [Automatic] [Petrol]. Display Price: "₹3,800/day".
+   - RE Himalayan Bike Card: Save uploaded black adventure bike as `himalayan.png`. Add specs badges: [1 Seat] [Manual] [Adventure]. Display Price: "₹2,500/day".
+   - RE Meteor 350 Card: Save uploaded cruiser bike as `meteor.png`. Add specs badges: [1 Seat] [Manual] [Cruiser]. Display Price: "₹2,200/day".
+4. Layout Fluidity: Ensure car cards use standard constraints (`aspect-[16/10]` and `object-cover rounded-t-xl`) so real assets never stretch or distort. Force GPU acceleration with Tailwind `transform-gpu` to guarantee buttery-smooth mobile webview scrolling.
+5. Every single card must feature a high-contrast action button labeled "Book Now" that triggers the interactive booking form layout modal.
+
+### PHASE 2: PRESERVE & AUDIT BACKEND SECURITY
+1. Keep the existing Express.js server routes, parameterized Drizzle ORM pipeline, and database migrations intact.
+2. Secure Environment: Enforce strict storage for runtime secrets inside a root `.env` file and append it to `.gitignore`. Reference parameters safely in the Vite frontend via `import.meta.env.VITE_...`.
+3. Denial-of-Service Defense: Ensure `express-rate-limit` middleware protects the POST booking endpoint (max 5 submissions per 15 minutes per IP).
+4. Data Inbound Safety: Bind inbound endpoints to strict Zod runtime validation check schemas processing incoming request payloads, blocking execution if field payloads are malformed.
+
+Scan the repository files, implement this professional UI reconstruction using the uploaded files, and ensure the full-stack database connections run smoothly.
