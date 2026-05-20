@@ -244,19 +244,45 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#08090a]">
-      {/* Subtle background glow — pure dark, no image text bleed-through */}
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#08090a] transform-gpu"
+      style={{ willChange: "transform" }}
+    >
+      {/* ── Cinematic video background ── */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0 transform-gpu"
+        style={{ willChange: "transform" }}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden
+      >
+        <source src="/videos/hero-car-video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark overlay — ensures AAA contrast for all text and the booking widget */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 z-[1] pointer-events-none"
+        aria-hidden
+        style={{ background: "rgba(8,9,10,0.62)" }}
+      />
+
+      {/* Subtle golden glow accents over the overlay */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(250,204,21,0.04) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 50% 80%, rgba(250,204,21,0.03) 0%, transparent 70%)",
+            "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(250,204,21,0.06) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 50% 80%, rgba(250,204,21,0.04) 0%, transparent 70%)",
         }}
       />
 
-      {/* Animated car running scene */}
-      <RunningCarScene />
+      {/* Animated car running scene — z-[3] sits above video + overlays */}
+      <div className="absolute inset-0 z-[3] pointer-events-none">
+        <RunningCarScene />
+      </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-6 py-24 max-w-5xl mx-auto w-full">
         <motion.div
