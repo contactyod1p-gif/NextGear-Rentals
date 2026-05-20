@@ -16,11 +16,16 @@ import {
   useListBookings,
   useGetBookingStats,
   useDeleteBooking,
+  type Booking,
+  type VehicleCount,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getListBookingsQueryKey, getGetBookingStatsQueryKey } from "@workspace/api-client-react";
+
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLoginGate from "@/components/AdminLoginGate";
+
+type VehicleChartEntry = { name: string; count: number; color: string };
 
 type SortKey = "bookingDate" | "fullName" | "selectedVehicle" | "rentalDays";
 type SortDir = "asc" | "desc";
@@ -193,12 +198,12 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
     const q = search.toLowerCase();
     return bookings
       .filter(
-        (b) =>
+        (b: Booking) =>
           b.fullName.toLowerCase().includes(q) ||
           b.phoneNumber.toLowerCase().includes(q) ||
           b.selectedVehicle.toLowerCase().includes(q)
       )
-      .sort((a, b) => {
+      .sort((a: Booking, b: Booking) => {
         let av: string | number = a[sortKey] ?? "";
         let bv: string | number = b[sortKey] ?? "";
         if (sortKey === "bookingDate") {
@@ -228,7 +233,7 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
 
   const vehicleData = useMemo(
     () =>
-      (stats?.vehicleBreakdown ?? []).map((v) => ({
+      (stats?.vehicleBreakdown ?? []).map((v: VehicleCount) => ({
         name: v.vehicle,
         count: v.count,
         color: VEHICLE_COLORS[v.vehicle] ?? "#facc15",
@@ -236,11 +241,11 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
     [stats]
   );
 
-  const topVehicle = vehicleData.sort((a, b) => b.count - a.count)[0]?.name ?? "—";
+  const topVehicle = vehicleData.sort((a: VehicleChartEntry, b: VehicleChartEntry) => b.count - a.count)[0]?.name ?? "—";
 
   const thisMonth = useMemo(() => {
     const now = new Date();
-    return bookings.filter((b) => {
+    return bookings.filter((b: Booking) => {
       const d = new Date(b.bookingDate);
       return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     }).length;
@@ -421,14 +426,14 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
                       <YAxis tick={{ fontSize: 10, fill: "#71717a" }} axisLine={false} tickLine={false} allowDecimals={false} />
                       <Tooltip content={<CustomTooltipBar />} />
                       <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                        {vehicleData.map((entry, i) => (
+                        {vehicleData.map((entry: VehicleChartEntry, i: number) => (
                           <Cell key={i} fill={entry.color} fillOpacity={0.85} />
                         ))}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                   <div className="mt-3 space-y-1.5">
-                    {vehicleData.map((v) => (
+                    {vehicleData.map((v: VehicleChartEntry) => (
                       <div key={v.name} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full" style={{ backgroundColor: v.color }} />
@@ -507,7 +512,7 @@ function AdminDashboardInner({ onLogout }: { onLogout: () => void }) {
                   </thead>
                   <tbody>
                     <AnimatePresence initial={false}>
-                      {filtered.map((b, i) => (
+                      {filtered.map((b: Booking, i: number) => (
                         <motion.tr
                           key={b.id}
                           initial={{ opacity: 0 }}
