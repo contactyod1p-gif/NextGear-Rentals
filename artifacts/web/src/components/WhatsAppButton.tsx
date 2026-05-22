@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const WHATSAPP_NUMBER = "918135829196";
-const WHATSAPP_MESSAGE = "Hi NextGear! I'd like to enquire about a vehicle rental.";
+const WHATSAPP_MESSAGE =
+  "Hi Baraut Self Drive Cars! I am browsing your website and would love to check the availability for renting a vehicle. Please let me know the process.";
 
 export default function WhatsAppButton() {
   const [hovered, setHovered] = useState(false);
@@ -10,8 +11,7 @@ export default function WhatsAppButton() {
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
-      {/* Tooltip label */}
+    <div className="fixed bottom-6 right-6 z-[999] flex items-center gap-3">
       <AnimatePresence>
         {hovered && (
           <motion.div
@@ -19,21 +19,19 @@ export default function WhatsAppButton() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.95 }}
             transition={{ duration: 0.18 }}
-            className="bg-zinc-900 border border-white/10 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-xl whitespace-nowrap"
+            className="relative bg-zinc-900 border border-white/10 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-xl whitespace-nowrap"
           >
-            Chat on WhatsApp
-            {/* Arrow */}
+            Chat with Baraut Drive
             <span className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] border-b-[5px] border-l-[5px] border-t-transparent border-b-transparent border-l-zinc-900" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Button */}
       <motion.a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Chat with us on WhatsApp"
+        aria-label="Chat with Baraut Self Drive Cars on WhatsApp"
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
         initial={{ scale: 0, opacity: 0 }}

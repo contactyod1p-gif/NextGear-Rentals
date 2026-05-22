@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+const WHATSAPP_NUMBER = "918135829196";
+const WHATSAPP_MESSAGE =
+  "Hi Baraut Self Drive Cars! I am browsing your website and would love to check the availability for renting a vehicle. Please let me know the process.";
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,7 +18,10 @@ export default function Navbar() {
   const links = [
     { label: "Fleet", href: "#fleet" },
     { label: "Book", href: "#book" },
+    { label: "Why Us", href: "#why-us" },
   ];
+
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   return (
     <motion.nav
@@ -30,12 +37,12 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#" className="flex items-center">
           <span className="text-xl font-black text-white tracking-tight">
-            Next
+            Baraut
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(135deg, #facc15 0%, #f59e0b 100%)" }}
             >
-              Gear
+              Drive
             </span>
           </span>
         </a>
@@ -51,7 +58,15 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#book"
+            href="/admin"
+            className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-200"
+          >
+            Partner Login
+          </a>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="transform-gpu text-sm font-bold text-zinc-900 bg-yellow-400 hover:bg-yellow-300 transition-all duration-200 rounded-full px-5 py-2 hover:scale-105 active:scale-95"
           >
             Book Now
@@ -90,7 +105,16 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#book"
+            href="/admin"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            Partner Login
+          </a>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="text-sm font-bold text-zinc-900 bg-yellow-400 rounded-full px-5 py-2.5 text-center"
           >

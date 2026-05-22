@@ -20,12 +20,10 @@ function makeZodResolver<T extends z.ZodType<FieldValues>>(schema: T): Resolver<
 }
 
 const VEHICLES = [
-  "Mahindra Thar",
-  "Toyota Innova",
-  "Hyundai Creta",
-  "Toyota Fortuner",
-  "Mercedes GLC",
-  "Kia Carens",
+  "BMW 3 Series",
+  "Mahindra Thar 4x4",
+  "Maruti Swift VXI",
+  "Hyundai i20 Asta",
 ] as const;
 
 const bookingSchema = z.object({
@@ -57,7 +55,6 @@ const bookingSchema = z.object({
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
-
 type SubmitError = "validation" | "rate_limit" | "server" | null;
 
 interface SuccessData {
@@ -110,7 +107,6 @@ export default function BookingForm() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<BookingFormData>({
     resolver: makeZodResolver(bookingSchema),
@@ -188,7 +184,7 @@ export default function BookingForm() {
               </span>
             </h2>
             <p className="mt-4 text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
-              Fill in the details below and our team will confirm your booking within 15 minutes.
+              Fill in the details below and our Baraut team will confirm your booking within 15 minutes.
             </p>
           </motion.div>
 
@@ -205,11 +201,7 @@ export default function BookingForm() {
               style={{ background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(234,179,8,0.06) 0%, transparent 70%)" }}
             />
 
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="relative z-10 space-y-5"
-              noValidate
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="relative z-10 space-y-5" noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">
@@ -365,10 +357,7 @@ export default function BookingForm() {
               { icon: "🔑", label: "Instant Confirmation" },
               { icon: "🚗", label: "Free Cancellation" },
             ].map(({ icon, label }) => (
-              <div
-                key={label}
-                className="rounded-xl border border-white/6 bg-white/[0.02] p-3"
-              >
+              <div key={label} className="rounded-xl border border-white/6 bg-white/[0.02] p-3">
                 <div className="text-xl mb-1">{icon}</div>
                 <p className="text-xs text-zinc-500">{label}</p>
               </div>

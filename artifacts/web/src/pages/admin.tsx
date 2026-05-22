@@ -36,22 +36,20 @@ function buildWhatsAppUrl(b: Booking): string {
     day: "numeric", month: "short", year: "numeric",
   });
   const text =
-    `Hi ${b.fullName}, your NextGear Rentals booking is confirmed! 🚗\n\n` +
+    `Hi ${b.fullName}, your Baraut Self Drive Cars booking is confirmed! 🚗\n\n` +
     `Vehicle: ${b.selectedVehicle}\n` +
     `Rental Duration: ${b.rentalDays} day${b.rentalDays !== 1 ? "s" : ""}\n` +
     `Booked On: ${bookedOn}\n\n` +
-    `Thank you for choosing NextGear Rentals. We'll be in touch with pickup details shortly.`;
+    `Thank you for choosing Baraut Self Drive Cars. We'll be in touch with pickup details shortly.`;
   return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 type SortDir = "asc" | "desc";
 
 const VEHICLE_COLORS: Record<string, string> = {
-  "Mahindra Thar":   "#facc15",
-  "Toyota Innova":   "#60a5fa",
-  "Hyundai Creta":   "#a78bfa",
-  "Toyota Fortuner": "#34d399",
-  "Mercedes GLC":    "#f97316",
-  "Kia Carens":      "#f472b6",
+  "BMW 3 Series":      "#60a5fa",
+  "Mahindra Thar 4x4": "#facc15",
+  "Maruti Swift VXI":  "#34d399",
+  "Hyundai i20 Asta":  "#a78bfa",
 };
 
 function StatCard({

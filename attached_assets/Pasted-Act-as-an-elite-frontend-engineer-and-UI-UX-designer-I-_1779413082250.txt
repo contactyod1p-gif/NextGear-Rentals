@@ -1,0 +1,49 @@
+Act as an elite frontend engineer and UI/UX designer. I have imported a rental template project. We are heavily customizing, upgrading, and expanding this into a premium, hyper-personalized application for a high-ticket client. 
+
+The client's business name is: Baraut Self Drive Cars
+
+Please completely overhaul the codebase, component files, layout, and global text files to match the structural requirements below. Ensure the code remains clean, scalable, modular, and responsive.
+
+1. GLOBAL RE-BRANDING & RE-STYLING
+- Globally replace any old brand text, metadata titles, and logos with "Baraut Self Drive Cars" (or "Baraut" for short logo formats).
+- Set up a clean, premium color palette suitable for a luxury/rugged self-drive rental agency (e.g., sleek deep dark mode tones or polished high-contrast modern elements with vibrant accents for CTA buttons).
+
+2. HOMEPAGE HERO SECTION OVERHAUL
+- Convert the Hero section background to support a premium, full-screen background video loop. 
+- Use the local video path asset placeholder: `/public/videos/baraut-hero-bg.mp4`
+- The video element must include: autoPlay, loop, muted, playsInline, and object-cover.
+- Crucial UI: Place a rich dark overlay (e.g., bg-black/50) directly over the video background to guarantee high text readability.
+- Add bold, punchy typography overlay text reading: "Premium Self Drive Cars in Baraut"
+- Below the title, add two prominent Call-To-Action (CTA) buttons side-by-side: "View Fleet" and "Book Now (WhatsApp)".
+
+3. EXPANDED SECTIONS TO ADD (CREATE COMPONENTS IF MISSING)
+
+A. FLEET SECTION (UPGRADED INVENTORY):
+- Locate or create the vehicle data grid array. Populate it with 4 top-tier local Indian rental options:
+  1. BMW 3 Series (Luxury Rental) -> Image Path: `/public/images/baraut-bmw.jpg` -> Price: ₹8,000/day
+  2. Mahindra Thar 4x4 -> Image Path: `/public/images/baraut-thar.jpg` -> Price: ₹3,500/day
+  3. Maruti Swift VXI -> Image Path: `/public/images/baraut-swift.jpg` -> Price: ₹1,500/day
+  4. Hyundai i20 Asta -> Image Path: `/public/images/baraut-i20.jpg` -> Price: ₹1,800/day
+- Each vehicle card must display the image, car name, clear price/day tag, explicit specification badges (e.g., Manual/Automatic, Petrol/Diesel), and a prominent "Quick Book" action button.
+
+B. "WHY CHOOSE US" SECTION:
+- Add a clean, beautifully spaced grid section highlighting 4 trust pillars with elegant modern iconography:
+  - "24/7 Roadside Support" -> Always there when you need us on the trip.
+  - "Deeply Sanitized Vehicles" -> Certified hygiene and safety check before every delivery.
+  - "Easy, Frictionless Booking" -> No heavy paperwork. Upload ID, verify, and drive.
+  - "Affordable Pricing" -> Completely transparent billing with absolute zero hidden charges.
+
+C. WHATSAPP STICKY FLOATING BUTTON:
+- Implement a floating sticky WhatsApp button fixed to the bottom-right corner of the entire web application viewport.
+- It must have a high z-index, smooth bounce/pulse entrance animation, and use a recognizable vibrant WhatsApp green icon.
+- When clicked, it must trigger a native WhatsApp link (`https://wa.me/...`) pre-filled with a highly professional inquiry text string tailored to the business.
+
+4. UPGRADED WHATSAPP INTEGRATION LOGIC
+- Every "Book Now", "Quick Book", and sticky floating button must be programmatically wired to launch a WhatsApp text query message. 
+- The text must automatically structure itself beautifully. Example: "Hi Baraut Self Drive Cars! I am browsing your website and would love to check the availability for renting a vehicle. Please let me know the process."
+
+5. ADMIN DASHBOARD MENTION (VALUE STACKING)
+- To increase the perceived business value of this build, add a subtle, beautifully designed "Partner Login" or "Admin Access" link in the navigation menu or footer. 
+- Create a clean, mock Admin Dashboard sub-route (`/admin` or `/dashboard`) showcasing charts for "Total Bookings", "Active Fleet Status", "Pending WhatsApp Requests", and a simple car inventory management table. This proves to the client that this system can fully scale behind the scenes to run their entire backend enterprise.
+
+Review the build for compile errors, ensure all layouts adjust beautifully for mobile viewports, compile, and run the preview server so I can record the walk-through clip.
