@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import HowItWorks from "@/components/HowItWorks";
 import FleetSection from "@/components/FleetSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Testimonials from "@/components/Testimonials";
@@ -25,6 +26,7 @@ function Home() {
     <div className="min-h-screen bg-[#08090a]">
       <Navbar />
       <HeroSection />
+      <HowItWorks />
       <FleetSection />
       <WhyChooseUs />
       <Testimonials />
