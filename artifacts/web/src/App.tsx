@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FleetSection from "@/components/FleetSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import Testimonials from "@/components/Testimonials";
 import BookingForm from "@/components/BookingForm";
 import Footer from "@/components/Footer";
 import AdminDashboard from "@/pages/admin";
@@ -25,6 +26,7 @@ function Home() {
       <HeroSection />
       <FleetSection />
       <WhyChooseUs />
+      <Testimonials />
       <BookingForm />
       <Footer />
     </div>
