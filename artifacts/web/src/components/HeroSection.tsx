@@ -17,13 +17,25 @@ export default function HeroSection() {
         backgroundPosition: "center center",
       }}
     >
+      {/* Background video — autoplay, looped, muted, mobile-safe */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        aria-hidden
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+
       {/* Dark gradient overlay — heavy on the left for text legibility, fades right */}
       <div
         className="absolute inset-0 z-[1]"
         aria-hidden
         style={{
           background:
-            "linear-gradient(105deg, rgba(5,5,8,0.92) 0%, rgba(5,5,8,0.78) 35%, rgba(5,5,8,0.40) 65%, rgba(5,5,8,0.15) 100%)",
+            "linear-gradient(105deg, rgba(5,5,8,0.88) 0%, rgba(5,5,8,0.72) 35%, rgba(5,5,8,0.45) 65%, rgba(5,5,8,0.25) 100%)",
         }}
       />
 
@@ -37,7 +49,7 @@ export default function HeroSection() {
       />
 
       {/* Content — left-aligned, padded */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-32 pt-40">
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-32 pt-40">
         <div className="max-w-2xl">
           {/* Badge */}
           <motion.div
@@ -150,7 +162,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-zinc-600">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-zinc-600">
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
