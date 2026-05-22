@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 import tharImg from "@assets/TharSoloSM24_1779414742860.jpg";
 import tuv300Img from "@assets/vel-car-s-namakkal-bazaar-namakkal-second-hand-car-dealers-fok_1779414742807.jpg";
@@ -107,7 +108,47 @@ const cardVariants = {
   }),
 };
 
-function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
+/* ─── Skeleton Card ─────────────────────────────────────────────────── */
+function SkeletonCard() {
+  return (
+    <div className="rounded-2xl border border-white/8 bg-white/[0.03] overflow-hidden flex flex-col animate-pulse">
+      {/* Image placeholder */}
+      <div className="h-52 bg-gradient-to-r from-white/[0.04] via-white/[0.08] to-white/[0.04] bg-[length:200%_100%] animate-shimmer shrink-0" />
+      <div className="p-5 flex flex-col gap-4">
+        {/* Title lines */}
+        <div className="flex flex-col gap-2">
+          <div className="h-2.5 w-16 rounded-full bg-white/10" />
+          <div className="h-5 w-40 rounded-lg bg-white/10" />
+        </div>
+        {/* Spec chips */}
+        <div className="flex gap-2">
+          {[56, 64, 60].map((w) => (
+            <div key={w} className="h-10 rounded-lg bg-white/6" style={{ width: w }} />
+          ))}
+        </div>
+        {/* Perk pills */}
+        <div className="flex flex-wrap gap-1.5">
+          {[48, 72, 56, 64].map((w) => (
+            <div key={w} className="h-6 rounded-full bg-white/6" style={{ width: w }} />
+          ))}
+        </div>
+        {/* CTA button */}
+        <div className="mt-auto h-11 rounded-xl bg-white/8" />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Vehicle Card ──────────────────────────────────────────────────── */
+function VehicleCard({
+  vehicle,
+  index,
+  onBook,
+}: {
+  vehicle: Vehicle;
+  index: number;
+  onBook: (name: string) => void;
+}) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -142,7 +183,7 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
           }}
         />
 
-        {/* ── Image ── */}
+        {/* Image */}
         <div className="relative w-full h-52 overflow-hidden shrink-0 bg-zinc-950">
           <img
             src={vehicle.imageSrc}
@@ -151,19 +192,14 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
             decoding="async"
             className="w-full h-full object-cover object-center opacity-90 transition-transform duration-500 ease-in-out group-hover:scale-105"
           />
-          {/* Bottom fade */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#08090a] via-[#08090a]/25 to-transparent" />
 
-          {/* Badge */}
           <div className="absolute top-3 left-3 z-10">
-            <span
-              className={`text-[10px] font-black uppercase tracking-widest border rounded-full px-3 py-1.5 backdrop-blur-sm ${vehicle.badgeStyle}`}
-            >
+            <span className={`text-[10px] font-black uppercase tracking-widest border rounded-full px-3 py-1.5 backdrop-blur-sm ${vehicle.badgeStyle}`}>
               {vehicle.badge}
             </span>
           </div>
 
-          {/* Price pill overlaid on image bottom-right */}
           <div className="absolute bottom-3 right-3 z-10">
             <div className="flex items-baseline gap-0.5 rounded-xl bg-black/70 backdrop-blur-sm border border-white/10 px-3 py-1.5">
               <span className="text-base font-black text-yellow-400">
@@ -174,9 +210,8 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
           </div>
         </div>
 
-        {/* ── Card Body ── */}
+        {/* Card Body */}
         <div className="relative z-10 p-5 flex flex-col flex-1 gap-4">
-          {/* Name & subtitle */}
           <div>
             <p className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 ${vehicle.accentColor}`}>
               {vehicle.subtitle}
@@ -184,13 +219,9 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
             <h3 className="text-xl font-black text-white leading-tight">{vehicle.name}</h3>
           </div>
 
-          {/* Spec chips */}
           <div className="flex flex-wrap gap-2">
             {vehicle.specs.map((s) => (
-              <div
-                key={s.label}
-                className="flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.04] px-3 py-1.5"
-              >
+              <div key={s.label} className="flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.04] px-3 py-1.5">
                 <span className="text-sm leading-none">{s.icon}</span>
                 <div>
                   <p className="text-[9px] text-zinc-500 uppercase tracking-widest leading-none mb-0.5">{s.label}</p>
@@ -200,24 +231,21 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
             ))}
           </div>
 
-          {/* Perk pills */}
           <div className="flex flex-wrap gap-1.5 flex-1">
             {vehicle.perks.map((p) => (
-              <span
-                key={p}
-                className="text-[11px] text-zinc-400 bg-white/[0.04] border border-white/8 rounded-full px-2.5 py-1 leading-none"
-              >
+              <span key={p} className="text-[11px] text-zinc-400 bg-white/[0.04] border border-white/8 rounded-full px-2.5 py-1 leading-none">
                 {p}
               </span>
             ))}
           </div>
 
-          {/* CTA */}
+          {/* CTA — fires toast + opens WhatsApp */}
           <a
             href={buildQuickBookUrl(vehicle.name, vehicle.pricePerDay)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-auto flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-95"
+            onClick={() => onBook(vehicle.name)}
+            className="mt-auto flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-bold transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-95"
             style={{
               background: "linear-gradient(135deg, #facc15 0%, #d97706 100%)",
               boxShadow: "0 4px 16px rgba(250,204,21,0.25)",
@@ -235,21 +263,35 @@ function VehicleCard({ vehicle, index }: { vehicle: Vehicle; index: number }) {
   );
 }
 
+/* ─── Fleet Section ─────────────────────────────────────────────────── */
 export default function FleetSection() {
+  const { toast } = useToast();
   const [activeFilter, setActiveFilter] = useState<Category>("All");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 900);
+    return () => clearTimeout(t);
+  }, []);
 
   const filtered = activeFilter === "All"
     ? FLEET
     : FLEET.filter((v) => v.category === activeFilter);
 
+  function handleBook(vehicleName: string) {
+    toast({
+      title: "Reservation request sent!",
+      description: `${vehicleName} added to your reservation. Opening WhatsApp to confirm…`,
+      duration: 4000,
+    });
+  }
+
   return (
     <section id="fleet" className="bg-[#08090a] py-24 px-6 relative overflow-hidden">
-      {/* Subtle section glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.03) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.03) 0%, transparent 60%)",
         }}
       />
 
@@ -303,20 +345,38 @@ export default function FleetSection() {
           ))}
         </motion.div>
 
-        {/* Grid */}
+        {/* Grid — skeleton or real cards */}
         <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFilter}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {filtered.map((vehicle, i) => (
-              <VehicleCard key={vehicle.name} vehicle={vehicle} index={i} />
-            ))}
-          </motion.div>
+          {loading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {[0, 1, 2].map((i) => <SkeletonCard key={i} />)}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filtered.map((vehicle, i) => (
+                <VehicleCard
+                  key={vehicle.name}
+                  vehicle={vehicle}
+                  index={i}
+                  onBook={handleBook}
+                />
+              ))}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </section>

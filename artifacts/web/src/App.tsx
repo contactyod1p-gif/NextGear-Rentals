@@ -4,9 +4,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import BookingSearchBar from "@/components/BookingSearchBar";
 import HowItWorks from "@/components/HowItWorks";
 import FleetSection from "@/components/FleetSection";
-import WhyChooseUs from "@/components/WhyChooseUs";
+import BentoGrid from "@/components/BentoGrid";
+import FAQSection from "@/components/FAQSection";
 import Testimonials from "@/components/Testimonials";
 import PricingCalculator from "@/components/PricingCalculator";
 import BookingForm from "@/components/BookingForm";
@@ -26,9 +28,11 @@ function Home() {
     <div className="min-h-screen bg-[#08090a]">
       <Navbar />
       <HeroSection />
+      <BookingSearchBar />
       <HowItWorks />
       <FleetSection />
-      <WhyChooseUs />
+      <BentoGrid />
+      <FAQSection />
       <Testimonials />
       <PricingCalculator />
       <BookingForm />
